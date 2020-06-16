@@ -1,0 +1,17 @@
+import numpy as np
+import pandas as pd
+from datetime import datetime
+from   sklearn.metrics      import  mean_squared_error
+p = pd.read_csv('/content/drive/My Drive/train_csv.csv', header = 0, index_col = 1, parse_dates = True)
+p.drop(['id'],axis = 1,inplace = True)
+test=pd.read_csv('/content/drive/My Drive/test_csv.csv', header = 0, index_col = 1, parse_dates = True)
+
+rolling = p['feature'].rolling(window = 2) 
+rolling_mean =  rolling.mean()
+out = pd.DataFrame( {'Actual':p.feature, 'Forcasted':rolling_mean})
+out .dropna(axis = 0, inplace = True)
+print("Forcasted Data")
+print(out.Forcasted)
+r = np.sqrt(mean_squared_error(out.Actual, out.Forcasted))
+print("\n\n Accuracy measures ")
+print('RMSE: %.3f' % r)
